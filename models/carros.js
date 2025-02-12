@@ -1,0 +1,27 @@
+const { DataTypes } = require('sequelize');
+const sequelize = require('../sequelize');
+
+const Veiculo = sequelize.define('Veiculo', {
+    id_veiculo: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    placa: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    cor: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    modelo: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    }
+}, {
+    tableName: 'VEICULOS',
+    timestamps: false,
+});
+
+module.exports = Veiculo;
