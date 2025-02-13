@@ -101,7 +101,7 @@
         <h1>Gerenciamento de Carros</h1>
 
         <!-- Formulário para adicionar carros -->
-        <form id="add-car-form">
+        <form id="add-car-form" method="post">
             <input type="text" id="cor" placeholder="Cor do carro" required>
             <input type="text" id="placa" placeholder="Placa do carro" required>
             <select id="porte" required>
@@ -129,7 +129,7 @@
                 <td><%= carro.cor %></td>
                 <td><%= carro.placa %></td>
                 <td><%= carro.porte %></td>
-                <td><button class="delete-btn" onclick="deleteRow(this)">Excluir</button></td>
+                <td><button class="delete-btn" href="/del/<%= carro.id_veiculo%>">Excluir</button></td>
             </tr>
         <% }) %>
     </tbody>

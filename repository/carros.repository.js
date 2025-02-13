@@ -1,4 +1,4 @@
-const Veiculo = require('../models/Veiculo');
+const Veiculo = require('../models/carros');
 
 // Função para inserir um novo veículo
 const inserirVeiculo = async (placa, cor, modelo) => {

@@ -3,7 +3,8 @@ const cookieParser = require("cookie-parser");
 const express = require("express");
 const path = require("path");
 const checkToken = require("./services/checktoken");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const { deletarVeiculo } = require("./repository/carros.repository");
 require("dotenv").config()
 const app = express();
 app.set("view engine", "ejs");
@@ -79,13 +80,15 @@ app.post('/login', async (req, res) => {
 
 
 
-app.delete('/main/:id', checkToken("id"), (res, req) => {
+app.delete('/del/:id', checkToken("id"), (res, req) => {
     try {
+        const id = req.params.id
+        deletarVeiculo(id);
 
     } catch (error) {
 
     }
-
+    return res.redirect('/main/')
 })
 
 app.listen(4000, () => {
