@@ -115,68 +115,40 @@
 
         <!-- Tabela para exibir os carros -->
         <table id="car-table">
-    <thead>
-        <tr>
-            <th>Cor</th>
-            <th>Placa</th>
-            <th>Porte</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% carros.forEach(function(carro) { %>
-            <tr>
-                <td><%= carro.cor %></td>
-                <td><%= carro.placa %></td>
-                <td><%= carro.porte %></td>
-                <td><button class="delete-btn" href="/del/<%= carro.id_veiculo%>">Excluir</button></td>
-            </tr>
-        <% }) %>
-    </tbody>
-</table>
+            <thead>
+                <tr>
+                    <th>Cor</th>
+                    <th>Placa</th>
+                    <th>Porte</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% carros.forEach(function(carro) { %>
+                    <tr>
+                        <td>
+                            <%= carro.cor %>
+                        </td>
+                        <td>
+                            <%= carro.placa %>
+                        </td>
+                        <td>
+                            <%= carro.porte %>
+                        </td>
+                        <td>
+                            <a href="/main/<%= id %>/del/<%= carro.id_veiculo%>">
+
+                                <button class="delete-btn">Excluir</button>
+                            </a>
+
+                        </td>
+                    </tr>
+                    <% }) %>
+            </tbody>
+        </table>
     </div>
 
-    <script>
-    /*
-        document.getElementById('add-car-form').addEventListener('submit', function (event) {
-            event.preventDefault(); // Impede o envio do formulário
 
-            // Captura os valores dos campos
-            const cor = document.getElementById('cor').value;
-            const placa = document.getElementById('placa').value;
-            const porte = document.getElementById('porte').value;
-
-            // Valida se todos os campos foram preenchidos
-            if (!cor || !placa || !porte) {
-                alert('Por favor, preencha todos os campos.');
-                return;
-            }
-
-            // Cria uma nova linha na tabela
-            const tableBody = document.querySelector('#car-table tbody');
-            const newRow = document.createElement('tr');
-
-            newRow.innerHTML = `
-        <td>${cor}</td>
-        <td>${placa}</td>
-        <td>${porte}</td>
-        <td><button class="delete-btn" onclick="deleteRow(this)">Excluir</button></td>
-    `;
-
-            tableBody.appendChild(newRow);
-
-            // Limpa os campos do formulário
-            document.getElementById('cor').value = '';
-            document.getElementById('placa').value = '';
-            document.getElementById('porte').value = '';
-        });
-
-        // Função para excluir uma linha
-        function deleteRow(button) {
-            const row = button.closest('tr'); // Encontra a linha mais próxima
-            row.remove(); // Remove a linha
-        }*/
-    </script>
 </body>
 
 </html>

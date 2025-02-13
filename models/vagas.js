@@ -3,7 +3,7 @@ const sequelize = require('../sequelize');
 
 const Vaga = sequelize.define('Vaga', {
     id_vaga: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         primaryKey: true,
         autoIncrement: true,
     },

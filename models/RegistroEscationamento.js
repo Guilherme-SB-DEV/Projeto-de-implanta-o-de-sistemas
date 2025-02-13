@@ -3,7 +3,7 @@ const sequelize = require('../config/database');
 
 const RegistroEstacionamento = sequelize.define('RegistroEstacionamento', {
   id_registro: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     primaryKey: true,
     autoIncrement: true
   },

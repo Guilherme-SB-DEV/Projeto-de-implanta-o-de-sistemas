@@ -3,16 +3,17 @@ CREATE DATABASE estacionamento;
 USE estacionamento;
 
 CREATE TABLE USUARIO (
-    id_usuario INT PRIMARY KEY,
+    id_usuario VARCHAR(50) PRIMARY KEY,
     login VARCHAR(100),
     senha VARCHAR(100)
 );
 
 CREATE TABLE VEICULOS (
-    id_veiculo INT PRIMARY KEY,
+    id_veiculo VARCHAR(50) PRIMARY KEY,
     placa VARCHAR(100),
     cor VARCHAR(100),
-    modelo VARCHAR(100)
+    modelo VARCHAR(100),
+    porte VARCHAR(20)
 );
 
 CREATE TABLE VAGA (

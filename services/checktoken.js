@@ -20,15 +20,16 @@ function checkToken(modo) {
           return res.status(401).send("Token inválido");
         }
 
-        req.user = decoded;
+        req.usr = decoded;
 
         if (modo === "id") {
           // Pegando o ID corretamente de req.params.id
           const idFromUrl = req.params.id;
-          console.log("ID do token:", req.user.id);
+          console.log(decoded)
+          console.log("ID do token:", req.usr.id);
           console.log("ID da URL:", idFromUrl);
 
-          if (String(req.user.id) !== String(idFromUrl)) {
+          if (String(req.usr.id) !== String(idFromUrl)) {
             return res
               .status(403)
               .send("Acesso negado(id): usuário não autorizado");

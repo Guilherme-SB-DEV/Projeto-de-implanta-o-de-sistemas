@@ -1,11 +1,10 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database'); // Importa a conexão com o banco
+const sequelize = require('../conect'); // Importa a conexão com o banco
 
 const Usuario = sequelize.define('Usuario', {
   id_usuario: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     primaryKey: true,
-    autoIncrement: true
   },
   login: {
     type: DataTypes.STRING,

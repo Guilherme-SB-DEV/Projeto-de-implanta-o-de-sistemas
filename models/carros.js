@@ -3,7 +3,7 @@ const sequelize = require('./../conect');
 
 const Veiculo = sequelize.define('Veiculo', {
     id_veiculo: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         primaryKey: true,
         autoIncrement: true,
     },
@@ -18,6 +18,10 @@ const Veiculo = sequelize.define('Veiculo', {
     modelo: {
         type: DataTypes.STRING,
         allowNull: false,
+    },
+    porte:{
+        type: DataTypes.STRING,
+        allowNull:false
     }
 }, {
     tableName: 'VEICULOS',
