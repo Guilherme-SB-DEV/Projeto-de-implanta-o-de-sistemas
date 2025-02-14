@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../sequelize');
+const sequelize = require('../conect');
 
-const Vaga = sequelize.define('Vaga', {
+const Vagas = sequelize.define('Vaga', {
     id_vaga: {
         type: DataTypes.STRING,
         primaryKey: true,
@@ -16,4 +16,4 @@ const Vaga = sequelize.define('Vaga', {
     timestamps: false,
 });
 
-module.exports = Vaga;
+module.exports = Vagas;

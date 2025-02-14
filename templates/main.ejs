@@ -14,7 +14,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 200vh;
         }
 
         .container {
@@ -71,6 +71,7 @@
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #ddd;
+            text-align: center;
         }
 
         table th {
@@ -93,24 +94,68 @@
         button.delete-btn:hover {
             background-color: #c82333;
         }
+
+        #Vagas {
+            width: 50%;
+            margin: auto;
+            border-collapse: collapse;
+        }
+
+        #vagasTh,
+        #vagasTd {
+            border: 1px solid black;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .livre {
+            background-color: green;
+            color: white;
+        }
+
+        .ocupado {
+            background-color: red;
+            color: white;
+        }
+
+        .regContainer {
+            width: 300px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .regSelect,
+        .regButton {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+        }
     </style>
 </head>
 
 <body>
+
     <div class="container">
         <h1>Gerenciamento de Carros</h1>
 
         <!-- Formulário para adicionar carros -->
-        <form id="add-car-form" method="post">
+        <form id="add-car-form" action="/main/<%=id%>" method="post">
             <input type="text" id="cor" placeholder="Cor do carro" required>
             <input type="text" id="placa" placeholder="Placa do carro" required>
+            <input type="text" id="modelo" placeholder="modelo do carro" required>
+            
             <select id="porte" required>
                 <option value="" disabled selected>Selecione o porte</option>
                 <option value="Pequeno">Pequeno</option>
                 <option value="Médio">Médio</option>
                 <option value="Grande">Grande</option>
             </select>
-            <button type="submit">Adicionar Carro</button>
+            <button type="submit" >Adicionar Carro</button>
         </form>
 
         <!-- Tabela para exibir os carros -->
@@ -146,7 +191,165 @@
                     <% }) %>
             </tbody>
         </table>
-    </div>
+        <h2>Estacionamento</h2>
+        <table id="vagas">
+            <thead>
+                <tr>
+                    <th id="vagasTh">Vaga</th>
+                    <th id="vagasTh">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(vagas){ %>
+
+                    <% vagas.forEach(function (vaga) { %>
+                        <%if(vaga.status_vaga==="Disponível" ){%>
+                            <tr>
+                                <td>
+                                    <%=vaga.id_vaga%>
+                                </td>
+                                <td>
+                                    <%=vaga.status_vaga%>
+                                </td>
+
+                            </tr>
+                            <%};%>
+                                <%})%>
+
+
+                                    <%}%>
+
+            </tbody>
+        </table>
+        <h2>Vagas ocupadas</h2>
+        <table id="vagas">
+            <thead>
+                <tr>
+                    <th id="vagasTh">Vagas</th>
+                    <th id="vagasTh">Placa do carro</th>
+                    <th id="vagasTh">Data de entrada</th>
+                    <th id="vagasTh">Horaro de entrada</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <% ocupados.forEach(function (ocupado) { %>
+                    <tr>
+                        <td>
+                            <%=ocupado.id_vaga%>
+                        </td>
+                        <td>
+                            <%=ocupado.placa%>
+                        </td>
+                        <td>
+                            <%=ocupado.data%>
+                        </td>
+                        <td>
+                            <%=ocupado.inicio%>
+                        </td>
+
+                    </tr>
+                    <%})%>
+
+
+
+            </tbody>
+        </table>
+
+
+        <title>Registro de Estacionamento</title>
+        <style>
+        </style>
+        <h2>Registro de Estacionamento</h2>
+        <div class="regContainer">
+            <label for="veiculo">Escolha o veículo:</label>
+            <select class="regSelect" id="veiculo">
+                <%carros.forEach(function(carro){%>
+                    <option value="<%= carro.placa%>">
+                        <%= carro.placa%>
+                    </option>
+
+                    <%})%>
+            </select>
+
+            <label for="vaga">Escolha a vaga:</label>
+            <select class="regSelect" id="vaga">
+                <%vagas.forEach(function(vaga){%>
+                    <option value="<%= vaga.id_vaga %>">
+                        <%= vaga.id_vaga %>
+                    </option>
+                    <%})%>
+            </select>
+
+            <button class="regButton" onclick="registrarEstacionamento()">Registrar</button>
+        </div>
+
+        <script>
+            function registrarEstacionamento() {
+                const veiculoId = document.getElementById("veiculo").value;
+                const vagaId = document.getElementById("vaga").value;
+                const segmentoDir = window.location.pathname.split('/');
+                const id = segmentoDir[segmentoDir.length - 1];
+                console.log(id)
+                console.log(veiculoId)
+                console.log(vagaId)
+                console.log('tá chamando a função')
+
+                fetch("https://glorious-chainsaw-v6qq6g6pw7pfwvgx-4000.app.github.dev/registerVaga", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        // "Authorization": `Bearer ${localStorage.getItem('token')}`
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({
+                        id: id,
+                        id_veiculo: veiculoId,
+                        id_vaga: vagaId
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => alert("Registro realizado com sucesso!"))
+                    .catch(error => console.error("Erro ao registrar:", error));
+            }
+            
+            document.getElementById("add-car-form").addEventListener("submit", async function (event) {
+                event.preventDefault(); // Evita que o formulário recarregue a página
+
+                const cor = document.getElementById("cor").value;
+                const placa = document.getElementById("placa").value;
+                const porte = document.getElementById("porte").value;
+                const modelo = document.getElementById("modelo").value;
+                
+
+                const segmentoDir = window.location.pathname.split('/');
+                const id = segmentoDir[segmentoDir.length - 1];
+
+                try {
+                    const response = await fetch(`/main/${id}`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ cor, placa, porte, modelo })
+                    });
+
+                    if (response.ok) {
+                        alert("Carro adicionado com sucesso!");
+                        location.reload(); // Recarrega a página para atualizar os carros exibidos
+                    } else {
+                        alert("Erro ao adicionar o carro.");
+                    }
+                } catch (error) {
+                    console.error("Erro na requisição:", error);
+                }
+            });
+        </script>
+</body>
+
+
+
+</div>
 
 
 </body>

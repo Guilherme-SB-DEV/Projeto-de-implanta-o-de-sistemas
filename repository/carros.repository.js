@@ -19,8 +19,6 @@ async function deletarVeiculo(idVeiculo) {
         await Veiculo.destroy({
             where: { id_veiculo: idVeiculo }
         });
-       
-        return result;
     } catch (error) {
         console.error('Erro ao deletar veículo:', error);
         throw error;
@@ -33,7 +31,16 @@ async function listarVeiculos() {
         return result;
     } catch (error) {
         console.log(error);
-
+        
     }
 }
-module.exports = { inserirVeiculo, deletarVeiculo, listarVeiculos };
+async function buscarVeiculo(placa){
+    try {
+        const veiculo  = await Veiculo.findOne({where:{placa: placa}})
+        console.log('VEICULO: '+ veiculo)
+        return veiculo
+    } catch (error) {
+        console.log(error);
+    }
+}
+module.exports = { inserirVeiculo, deletarVeiculo, listarVeiculos, buscarVeiculo };

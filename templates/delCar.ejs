@@ -12,13 +12,14 @@
 
     document.addEventListener('DOMContentLoaded', async()=>{
         const segmentoDir = window.location.pathname.split('/');
-        const id = segmentoDir[segmentoDir.length - 4]; 
+        const id = segmentoDir[segmentoDir.length - 3]; 
         const carId = segmentoDir[segmentoDir.length - 1]; 
         try {
-    
+            
             const response = await fetch(`/main/${id}/del/${carId}`, {
                 method: 'DELETE',
             });
+            console.log('rodando')
             if(response.ok){
                 window.location.href = `/main/${id}`
             }

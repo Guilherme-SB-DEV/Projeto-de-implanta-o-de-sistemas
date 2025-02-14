@@ -1,5 +1,5 @@
 /* Lógico estacionamento: */
-CREATE DATABASE estacionamento;
+CREATE DATABASE estacionamento2;
 USE estacionamento;
 
 CREATE TABLE USUARIO (
@@ -25,10 +25,11 @@ CREATE TABLE REGISTRO_ESTACIONAMENTO (
     id_registro INT PRIMARY KEY,
     data_entrada DATE,
     data_saida DATE,
+    hora_entrada TIME,
     hora_saida TIME,
     tempo_permanencia TIME,
-    FK_VEICULOS_id_veiculo INT,
-    FK_VAGA_id_vaga INT,
+    FK_VEICULOS_id_veiculo VARCHAR(50),
+    FK_VAGA_id_vaga VARCHAR(50),
     FOREIGN KEY (FK_VEICULOS_id_veiculo) REFERENCES VEICULOS(id_veiculo),
     FOREIGN KEY (FK_VAGA_id_vaga) REFERENCES VAGA(id_vaga)
 );

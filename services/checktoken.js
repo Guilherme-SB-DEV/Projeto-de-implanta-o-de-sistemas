@@ -1,13 +1,10 @@
 const jwt = require("jsonwebtoken");
-
+require("dotenv").config()
 function checkToken(modo) {
   return function (req, res, next) {
     try {
-      const token =
-        modo === "id" ? req.cookies["auth"] : req.cookies["authSenha"];
-      const secret =
-        modo === "id" ? process.env.SECRET : process.env.SECRETSENHA;
-
+      const token = req.cookies["auth"]
+      const secret = process.env.SECRET
       console.log("Token recebido: " + JSON.stringify(token));
 
       if (!token) {
@@ -33,14 +30,6 @@ function checkToken(modo) {
             return res
               .status(403)
               .send("Acesso negado(id): usuário não autorizado");
-          }
-        } else {
-          // Verificação de email
-          const emailFromUrl = decodeURIComponent(req.params.email);
-          if (decodeURIComponent(req.user.email) !== emailFromUrl) {
-            return res
-              .status(403)
-              .send("Acesso negado(email): usuário não autorizado");
           }
         }
         next(); // Token válido e autorização confirmada
