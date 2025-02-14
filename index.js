@@ -95,6 +95,7 @@ app.get('/pay/:id', async (req, res) => {
                         Tempo de permanência: ${dadosTicket.tempo}
                         Vaga: ${dadosTicket.vaga}
                         Total: R$${dadosTicket.total}
+                        Chave pix: f25800c7-735f-45dc-a4dd-24abf4241870 
                         Obrigado por usar nosso estacionamento!`;
 
     // Caminho para salvar o arquivo
