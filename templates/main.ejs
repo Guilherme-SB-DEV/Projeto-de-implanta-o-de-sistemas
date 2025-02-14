@@ -139,23 +139,23 @@
 </head>
 
 <body>
-
     <div class="container">
+        <h1>Wall Park</h1>
         <h1>Gerenciamento de Carros</h1>
-
+        <p><strong>10R$/h</strong></p>
         <!-- Formulário para adicionar carros -->
         <form id="add-car-form" action="/main/<%=id%>" method="post">
             <input type="text" id="cor" placeholder="Cor do carro" required>
             <input type="text" id="placa" placeholder="Placa do carro" required>
             <input type="text" id="modelo" placeholder="modelo do carro" required>
-            
+
             <select id="porte" required>
                 <option value="" disabled selected>Selecione o porte</option>
                 <option value="Pequeno">Pequeno</option>
                 <option value="Médio">Médio</option>
                 <option value="Grande">Grande</option>
             </select>
-            <button type="submit" >Adicionar Carro</button>
+            <button type="submit">Adicionar Carro</button>
         </form>
 
         <!-- Tabela para exibir os carros -->
@@ -165,6 +165,7 @@
                     <th>Cor</th>
                     <th>Placa</th>
                     <th>Porte</th>
+                    <th>modelo</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -181,11 +182,14 @@
                             <%= carro.porte %>
                         </td>
                         <td>
+                            <%=carro.modelo%>
+                        </td>
+                        <td>
                             <a href="/main/<%= id %>/del/<%= carro.id_veiculo%>">
 
                                 <button class="delete-btn">Excluir</button>
                             </a>
-
+                            
                         </td>
                     </tr>
                     <% }) %>
@@ -195,7 +199,7 @@
         <table id="vagas">
             <thead>
                 <tr>
-                    <th id="vagasTh">Vaga</th>
+                    <th id="vagasTh">Vaga(id)</th>
                     <th id="vagasTh">Status</th>
                 </tr>
             </thead>
@@ -211,17 +215,15 @@
                                 <td>
                                     <%=vaga.status_vaga%>
                                 </td>
-
+                                
                             </tr>
                             <%};%>
-                                <%})%>
-
-
-                                    <%}%>
-
-            </tbody>
-        </table>
-        <h2>Vagas ocupadas</h2>
+                    <%})%>
+                    <%}%>
+                    
+                </tbody>
+            </table>
+            <h2>Vagas ocupadas</h2>
         <table id="vagas">
             <thead>
                 <tr>
@@ -232,7 +234,7 @@
                 </tr>
             </thead>
             <tbody>
-
+                
                 <% ocupados.forEach(function (ocupado) { %>
                     <tr>
                         <td>
@@ -246,6 +248,12 @@
                         </td>
                         <td>
                             <%=ocupado.inicio%>
+                        </td>
+                        <td>
+                            <a href="/pay/<%=ocupado.id%>">
+                                <button id="pay">Pagamento</button>
+                            </a>
+            
                         </td>
 
                     </tr>
@@ -312,7 +320,7 @@
                     .then(data => alert("Registro realizado com sucesso!"))
                     .catch(error => console.error("Erro ao registrar:", error));
             }
-            
+
             document.getElementById("add-car-form").addEventListener("submit", async function (event) {
                 event.preventDefault(); // Evita que o formulário recarregue a página
 
@@ -320,7 +328,7 @@
                 const placa = document.getElementById("placa").value;
                 const porte = document.getElementById("porte").value;
                 const modelo = document.getElementById("modelo").value;
-                
+
 
                 const segmentoDir = window.location.pathname.split('/');
                 const id = segmentoDir[segmentoDir.length - 1];

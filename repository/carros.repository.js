@@ -43,4 +43,13 @@ async function buscarVeiculo(placa){
         console.log(error);
     }
 }
-module.exports = { inserirVeiculo, deletarVeiculo, listarVeiculos, buscarVeiculo };
+async function buscarVeiculoId(id){
+    try {
+        const veiculo  = await Veiculo.findOne({where:{id_veiculo: id}})
+        console.log('VEICULO: '+ veiculo)
+        return veiculo
+    } catch (error) {
+        console.log(error);
+    }
+}
+module.exports = { inserirVeiculo, deletarVeiculo, listarVeiculos, buscarVeiculo, buscarVeiculoId };

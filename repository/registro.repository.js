@@ -34,5 +34,21 @@ async function findRegistro(id_vaga){
         console.log(error)
     }
 }
-
-module.exports = { registrarEntrada, listarRegistros, findRegistro };
+async function findRegistroId(id){
+    try {
+        const result = await RegistroEstacionamento.findOne({where:{id_registro: id}})
+        return result;
+    } catch (error) {
+        console.log(error)
+    }
+}
+async function delReg(id){
+    try {
+        const result = await RegistroEstacionamento.destroy({where:{id_registro: id}})
+        return result;
+    } catch (error) {
+        console.log(error)
+    }
+    
+}
+module.exports = { registrarEntrada, listarRegistros, findRegistro,findRegistroId, delReg};

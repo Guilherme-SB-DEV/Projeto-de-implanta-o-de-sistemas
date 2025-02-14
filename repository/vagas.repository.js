@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const Vagas = require("../models/vagas");
 
 async function listarVagas() {
@@ -11,9 +12,7 @@ async function listarVagas() {
 }
 async function defineStatusVaga(id, status) {
     try {
-        const vaga = await Vagas.findByPk(id);
-        vaga.status = status
-        vaga.save();
+        await Vagas.update({status_vaga: status}, {where:{id_vaga: id}})
     } catch (error) {
         console.log(error)
     }

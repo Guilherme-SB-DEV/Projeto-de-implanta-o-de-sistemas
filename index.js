@@ -2,15 +2,17 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const express = require("express");
 const cors = require('cors')
+const fs = require('fs');
 const path = require("path");
 const checkToken = require("./services/checktoken");
 const jwt = require("jsonwebtoken");
-const { deletarVeiculo, listarVeiculos, inserirVeiculo, buscarVeiculo } = require("./repository/carros.repository");
+const { deletarVeiculo, listarVeiculos, inserirVeiculo, buscarVeiculo, buscarVeiculoId } = require("./repository/carros.repository");
 const { buscarUsuarioPorLogin, adicionarUsuario } = require("./repository/usr.repository");
 require("dotenv").config()
 const bcrypt = require("bcrypt");
 const { listarVagas, defineStatusVaga } = require("./repository/vagas.repository");
-const { registrarEntrada, listarRegistros, findRegistro } = require("./repository/registro.repository");
+const { registrarEntrada, listarRegistros, findRegistro, findRegistroId, delReg } = require("./repository/registro.repository");
+const calcularTempoPermanencia = require("./services/calcCusto");
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -51,8 +53,8 @@ app.get('/main/:id', checkToken('id'), async (req, res) => {
                 const carro = await buscarVeiculo(registro.FK_VEICULOS_id_veiculo);
                 console.log(carro)
                 if (carro) {
-                    defineStatusVaga(vaga.id_vaga, 'Ocupada')
-                    ocupados.push({ id_vaga: vaga.id_vaga, placa: carro.placa, data: registro.data_entrada, inicio: registro.hora_entrada });
+                    await defineStatusVaga(vaga.id_vaga, 'Ocupada')
+                    ocupados.push({ id_vaga: vaga.id_vaga, placa: carro.placa, data: registro.data_entrada, inicio: registro.hora_entrada, id: registro.id_registro });
                 }
 
             }
@@ -65,22 +67,70 @@ app.get('/main/:id', checkToken('id'), async (req, res) => {
     }
 });
 
-app.get('/billing/:placa', async (req, res) => {
-    const placa = req.params.placa;
+app.get('/pay/:id', async (req, res) => {
+    const id = req.params.id;
+    const reg = await findRegistroId(id)
+    console.log('--------------------------' + JSON.stringify(reg))
+    const carro = await buscarVeiculo(reg.FK_VEICULOS_id_veiculo)
+    console.log(carro)
+    const calculo = await calcularTempoPermanencia(id, carro.porte)
 
-    const dadosNota = {
-        data: new Date().toLocaleDateString(),
-        placa,
-        cor: "cor",
-        porte: "porte"
+
+    const dadosTicket = {
+        id: id,
+        placa: carro.placa,
+        modelo: carro.modelo,
+        porte: carro.porte,
+        tempo: calculo.horas,
+        total: calculo.total,
+        vaga: reg.FK_VAGA_id_vaga,
     };
 
-    const nomeArquivo = await gerarNotaFiscal(dadosNota);
+    // Formata o conteúdo do ticket
+    const conteudo = `🚗 Ticket de Estacionamento 🚗\n
+                        ID: ${dadosTicket.id}
+                        Placa: ${dadosTicket.placa}
+                        Modelo: ${dadosTicket.modelo}
+                        Porte: ${dadosTicket.porte}
+                        Tempo de permanência: ${dadosTicket.tempo}
+                        Vaga: ${dadosTicket.vaga}
+                        Total: R$${dadosTicket.total}
+                        Obrigado por usar nosso estacionamento!`;
 
-    res.download(nomeArquivo, (err) => {
-        if (err) console.error("Erro no download:", err);
+    // Caminho para salvar o arquivo
+    const caminhoArquivo = path.join(__dirname, 'ticket.txt');
+    
+    await delReg(id)
+    await defineStatusVaga(reg.FK_VAGA_id_vaga, "Disponível");
+    // Cria o arquivo .txt no servidor
+    fs.writeFile(caminhoArquivo, conteudo, (err) => {
+        if (err) {
+            return res.status(500).send('Erro ao criar o ticket.');
+        }
+
+        // Envia o arquivo como resposta para download
+        res.download(caminhoArquivo, 'ticket.txt', (err) => {
+            if (err) {
+                console.log('Erro no envio do arquivo:', err);
+            } else {
+                console.log('Arquivo enviado com sucesso!');
+            }
+
+            // Apaga o arquivo após o download (se necessário)
+            fs.unlink(caminhoArquivo, (err) => {
+                if (err) {
+                    console.log('Erro ao apagar o arquivo:', err);
+                } else {
+                    console.log('Arquivo apagado após o download.');
+                }
+            });
+        });
     });
+
 })
+
+
+
 app.get('/register', (req, res) => {
     return res.render('register');
 })
